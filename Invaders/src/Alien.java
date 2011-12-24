@@ -9,7 +9,7 @@ public class Alien extends Sprite {
 	public Alien(int xPos, int yPos, int startFrame, String fileName,
 			int maxFrames, int fps, int scaleX, int scaleY, Dimension d) {
 		super(xPos, yPos, startFrame, fileName, maxFrames, fps, scaleX, scaleY, d);
-		missile = new Sprite(0, 0, 0, "missile", 2, 0, 4, 32, d);
+		missile = new Sprite(0, 0, 0, "missile", 2, 0, 4, 24, d);
 		reset();
 	}	
 
