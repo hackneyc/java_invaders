@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+
 import de.pxlab.pxl.*;
 import java.awt.image.BufferStrategy;
 
@@ -89,47 +90,28 @@ public class Game extends JFrame implements Runnable {
 		Font font = new Font("Verdana", Font.BOLD, 24);
 		g.setFont(font);
 		g.setColor(Color.GREEN);
-		g.setXORMode(Color.BLACK);
-		g.clearRect(insets.left, insets.top, dim.width, dim.height);
 		
-		//
-		// Place everything in the buffer.
-		//
-		for(i=0; i<3; i++)
-		{
-			shield[i].draw(g);
-		}
-		aliens.draw(g);
-		base.draw(g);
-		g.drawString(String.format("Score: % 4d", score), insets.left, insets.top + 20);
-
 		while (Thread.currentThread() == updateThread && (aliens.numAlive() != 0)) {
 
-			//
-			// Remove everything from the buffer (XOR) except the shields
-			//
-			aliens.draw(g);
-			base.draw(g);
-			g.drawString(String.format("Score: % 4d", score), insets.left, insets.top + 20);
-			
+			g.clearRect(insets.left, insets.top, dim.width - insets.left - insets.right, dim.height - insets.bottom - insets.top);
+
 			base.updatePosition();
-
 			aliens.updatePosition();
-
-			//
-			// Update any alien missiles.
-			//
 			aliens.updateMissiles();
-			
-			
+
 			//
 			// Collision checking
 			// 
 			score += aliens.collision(base);
-			
-			//
-			// Put everything back into the buffer at their new positions.
-			//
+			for(i=0; i<3; i++)
+			{
+				shield[i].collision(base);
+			}
+
+			for(i=0; i<3; i++)
+			{
+				shield[i].draw(g);
+			}
 			aliens.draw(g);
 			base.draw(g);
 			g.drawString(String.format("Score: % 4d", score), insets.left, insets.top + 20);
