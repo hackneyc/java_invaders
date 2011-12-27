@@ -16,15 +16,15 @@ public class Shield {
 			for(col=0; col<5; col++)
 			{
 				shieldBlock[row][col] = new Sprite("shield", 4);
-				shieldBlock[row][col].visible = true;
+				shieldBlock[row][col].setVisible(true);
 			}
 		}
 		
-		shieldBlock[0][0].visible = false;
-		shieldBlock[0][4].visible = false;
-		shieldBlock[4][1].visible = false;
-		shieldBlock[4][2].visible = false;
-		shieldBlock[4][3].visible = false;
+		shieldBlock[0][0].setVisible(false);
+		shieldBlock[0][4].setVisible(false);
+		shieldBlock[4][1].setVisible(false);
+		shieldBlock[4][2].setVisible(false);
+		shieldBlock[4][3].setVisible(false);
 	}
 
 	public void setXY(int newX, int newY)
@@ -56,47 +56,12 @@ public class Shield {
 		}
 	}
 
-	public boolean collision(Alien alien)
+	public boolean collision(Sprite s, int dammage)
 	{
-		int col;
-		int row;
-		boolean collided = false;
-
-		if (alien.visible)
-		{
-			for(row=0; row<5; row++)
-			{
-				for(col=0; col<5; col++)
-				{
-					if(shieldBlock[row][col].collision(alien.getX(), alien.getY(), alien.getWidth(), alien.getHeight()))
-					{
-						shieldBlock[row][col].visible = false;
-						collided = true;
-					}
-				}
-			}
-		}
-		return(collided);
-	}
-
-	public boolean collision(Base base)
-	{
-		Sprite missile = base.missile;
-		boolean collided = false;
-
-		if (missile.visible)
-		{
-			if ((collided = collision(missile.getX(), missile.getY(), missile.getWidth(), missile.getHeight())))
-			{
-				missile.visible = false;
-				base.clearDirection(Base.BASE_FIRE);
-			}
-		}
-		
-		return(collided);
+		return(collision(s.getX(), s.getY(), s.getWidth(), s.getHeight(), dammage));
 	}
 	
-	public boolean collision(int xPos, int yPos, int width, int height)
+	public boolean collision(int xPos, int yPos, int width, int height, int dammage)
 	{
 		int col;
 		int row;
@@ -108,15 +73,15 @@ public class Shield {
 			{
 				if(shieldBlock[row][col].collision(xPos, yPos, width, height))
 				{
-					if(++shieldBlock[row][col].frame >= 4)
+					shieldBlock[row][col].frame += dammage;
+					if(shieldBlock[row][col].frame >= 4)
 					{
-						shieldBlock[row][col].visible = false;
+						shieldBlock[row][col].setVisible(false);
 					}
 					collided = true;
 				}
 			}
 		}
 		return(collided);
-	}
-	
+	}	
 }

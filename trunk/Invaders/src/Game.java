@@ -104,10 +104,11 @@ public class Game extends JFrame implements Runnable {
 			//
 			// Collision checking
 			// 
-			score.add(aliens.collision(base));
+			score.add(base.collision(aliens));
+			
 			for(i=0; i<3; i++)
 			{
-				shield[i].collision(base);
+				base.collision(shield[i]);
 				aliens.collision(shield[i]);
 			}
 

@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ListIterator;
 
 public class Base extends Sprite implements KeyListener {
 	final static int BASE_LEFT = 0x01;
@@ -40,7 +41,7 @@ public class Base extends Sprite implements KeyListener {
 		setX(((dim.width / 2) - (getWidth() / 2)));
 		setY(dim.height - getHeight() - 16);
 		baseDir = 0;
-		missile.visible = false;
+		missile.setVisible(false);
 		fireReleased = true;
 	}
 	
@@ -56,21 +57,21 @@ public class Base extends Sprite implements KeyListener {
 			setX(getX() + baseSpeed);
 		}
 
-		if (missile.visible)
+		if (missile.isVisible())
 		{
 			if (missile.getY() - 8 >= 0)
 				missile.setY(missile.getY()-8);
 			else
 			{
-				missile.visible = false;
+				missile.setVisible(false);
 				clearDirection(Base.BASE_FIRE);
 			}
 		}
 		else
-		if (((baseDir & BASE_FIRE) != 0) && !missile.visible)
+		if (((baseDir & BASE_FIRE) != 0) && !missile.isVisible())
 		{
 			// New missile
-			missile.visible = true;
+			missile.setVisible(true);
 			missile.setX((getX() + (getWidth() / 2)) - (missile.getWidth()/2));
 			missile.setY(getY() - missile.getHeight());
 			baseShoot.play();
@@ -87,6 +88,57 @@ public class Base extends Sprite implements KeyListener {
 		explode.play();		
 	}
 
+	public boolean collision(Shield shield)
+	{
+		boolean collided = false;
+
+		if (missile.isVisible())
+		{
+			if ((collided = shield.collision(missile, 1)))
+			{
+				missile.setVisible(false);
+				clearDirection(Base.BASE_FIRE);
+			}
+		}
+		return(collided);
+	}
+
+	public int collision(Aliens aliens)
+	{
+		//
+		// Iterate through all the aliens that are alive and
+		// display them.
+		//
+		if (missile.isVisible())
+		{
+			ListIterator<Alien> list = aliens.liveAliens.listIterator();
+			while(list.hasNext())
+			{
+				Alien a = list.next();
+				// Check for alien collision with a missile
+				if (a.collision(missile.getX(),
+								missile.getY(),
+								missile.getWidth(),
+								missile.getHeight()))
+				{
+					// Kill the missile
+					missile.setVisible(false);
+					// Set the alien as dieing
+					a.setDieing();
+					// Play the kill sound
+					explode();
+					// Clear the base fire direction so it can fire again.
+					clearDirection(Base.BASE_FIRE);
+					// Speed up the aliens as more die
+					aliens.increaseSpeed();
+					// Increase the score
+					return(a.getPoints());
+				}
+			}
+		}
+		return(0);
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Check for right or left key press

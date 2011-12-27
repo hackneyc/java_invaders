@@ -14,7 +14,7 @@ public class Sprite {
 	private int numFrames;
 	private Image image[];
 	private Timer timer;
-	public boolean visible;
+	private boolean visible;
 	
 	private int startFrame;
 	private int startX;
