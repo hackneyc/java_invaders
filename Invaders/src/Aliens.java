@@ -137,18 +137,17 @@ public class Aliens {
 	public int collision(Base base)
 	{
 		Sprite missile = base.missile;
-		ListIterator<Alien> list;
 
 		//
 		// Iterate through all the aliens that are alive and
 		// display them.
 		//
-		list = liveAliens.listIterator();
-		while(list.hasNext())
+		if (missile.isVisible())
 		{
-			Alien a = list.next();
-			if (missile.isVisible())
+			ListIterator<Alien> list = liveAliens.listIterator();
+			while(list.hasNext())
 			{
+				Alien a = list.next();
 				// Check for alien collision with a missile
 				if (a.collision(missile.getX(),
 								missile.getY(),
@@ -157,14 +156,12 @@ public class Aliens {
 				{
 					// Kill the missile
 					missile.setVisible(false);
-					// Hide the invader
-					a.setVisible(false);
-					// Remove alien from the living list
-					list.remove();
+					// Set the alien as dieing
+					a.setDying();
 					// Play the kill sound
 					explode();
+					// Clear the base fire direction so it can fire again.
 					base.clearDirection(Base.BASE_FIRE);
-					// Clear the fire flag
 					// Speed up the aliens as more die
 					if (alienSpeed > 0)
 						alienSpeed--;
@@ -189,53 +186,13 @@ public class Aliens {
 		{
 			Alien a = list.next();
 			a.draw(g);
+			//
+			// Aliens may be diing to check to see if they have finished
+			// dieing and if so remove them from the live list.
+			//
+			if((a.visible == false) && (a.explode.visible == false))
+				list.remove();
 		}
-/*		
-		for(row=0; row<NUM_ROWS; row++)
-		{
-			for(i=0; i<ALIENS_PER_ROW; i++)
-			{
-				aliens[row][i].draw(g);
-				
-				for(n=0; n<3; n++)
-				{
-					if(shield[n].collision(aliens[row][i].missile))
-					{
-						aliens[row][i].missile.visible = false;
-					}
-					if(shield[n].collision(aliens[row][i]))
-					{
-						// No damage to the aliens
-					}
-				}
-				//
-				// Check for collisions with the base
-				//
-				if(aliens[row][i].collision(base.getX(),
-											base.getY(),
-											base.getWidth(),
-											base.getHeight()))
-				{
-					alienDirection = -1;
-					aliens[row][i].visible= false;
-					base.hits++;
-				}
-				else
-				if(aliens[row][i].missile.collision(base.getX(),
-						base.getY(),
-						base.getWidth(),
-						base.getHeight()))
-				{
-					baseExplode.play();
-//					alienDirection = -1;
-					aliens[row][i].missile.visible= false;
-					base.hits++;
-					base.reset();
-				}
-				else
-			}
-		}
-*/
 	}
 	
 	public void updateMissiles()
