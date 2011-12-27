@@ -11,6 +11,11 @@ public class Lives {
 		y = Y;
 		lives = 3;
 	}
+
+	public int get()
+	{
+		return(lives);
+	}
 	
 	public int decrement()
 	{
