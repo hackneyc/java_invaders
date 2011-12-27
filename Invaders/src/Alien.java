@@ -22,7 +22,7 @@ public class Alien extends Sprite {
 		explode.setVisible(false);
 	}
 	
-	public void setDying()
+	public void setDieing()
 	{
 		setVisible(false);
 		dieCount = 0;
@@ -35,7 +35,7 @@ public class Alien extends Sprite {
 	{
 		super.draw(g);
 		missile.draw(g);
-		if (explode.visible)
+		if (explode.isVisible())
 		{
 			if (dieCount++ > 20)
 			{
@@ -55,7 +55,7 @@ public class Alien extends Sprite {
 		{
 			// New missile
 			shooting = true;
-			missile.visible = true;
+			missile.setVisible(true);
 			missile.setX((getX() + (getWidth() / 2)) - (missile.getWidth()/2));
 			missile.setY(getY() + getHeight());
 		}
@@ -65,7 +65,7 @@ public class Alien extends Sprite {
 	public boolean updateMissile()
 	{
 		boolean shooting = false;
-		if (missile.visible)
+		if (missile.isVisible())
 		{
 			if ((missile.getY() + 8) < dim.height)
 			{
@@ -74,7 +74,7 @@ public class Alien extends Sprite {
 			}
 			else
 			{
-				missile.visible = false;
+				missile.setVisible(false);
 			}
 		}
 		

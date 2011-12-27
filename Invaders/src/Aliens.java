@@ -21,17 +21,23 @@ public class Aliens {
 	private int alienDirection;
 	private Alien alien[][];
 	private SoundClip invaderKilled;
-	private LinkedList<Alien> liveAliens = null;
+	public LinkedList<Alien> liveAliens = null;
 	private LinkedList<Alien> shootingAliens = null;
 	private int alienSpeed;
 	private int alienSpeedCount = 0;
 
-	void explode()
+	public void increaseSpeed()
+	{
+		if (alienSpeed > 0)
+			alienSpeed--;
+	}
+	
+	public void explode()
 	{
 		invaderKilled.play();
 	}
 	
-	void updatePosition()
+	public void updatePosition()
 	{
 		int row;
 		int col;
@@ -133,47 +139,8 @@ public class Aliens {
 			alienMarchIndex = (alienMarchIndex + 1) % MAX_ALIEN_MARCH;
 		}
 	}
-
-	public int collision(Base base)
-	{
-		Sprite missile = base.missile;
-
-		//
-		// Iterate through all the aliens that are alive and
-		// display them.
-		//
-		if (missile.isVisible())
-		{
-			ListIterator<Alien> list = liveAliens.listIterator();
-			while(list.hasNext())
-			{
-				Alien a = list.next();
-				// Check for alien collision with a missile
-				if (a.collision(missile.getX(),
-								missile.getY(),
-								missile.getWidth(),
-								missile.getHeight()))
-				{
-					// Kill the missile
-					missile.setVisible(false);
-					// Set the alien as dieing
-					a.setDying();
-					// Play the kill sound
-					explode();
-					// Clear the base fire direction so it can fire again.
-					base.clearDirection(Base.BASE_FIRE);
-					// Speed up the aliens as more die
-					if (alienSpeed > 0)
-						alienSpeed--;
-					// Increase the score
-					return(a.getPoints());
-				}
-			}
-		}
-		return(0);
-	}
 	
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		ListIterator<Alien> list;
 
@@ -190,7 +157,7 @@ public class Aliens {
 			// Aliens may be diing to check to see if they have finished
 			// dieing and if so remove them from the live list.
 			//
-			if((a.visible == false) && (a.explode.visible == false))
+			if((a.isVisible() == false) && (a.explode.isVisible() == false))
 				list.remove();
 		}
 	}
@@ -282,10 +249,21 @@ public class Aliens {
 		while(list.hasNext())
 		{
 			Alien a = list.next();
-			if (shield.collision(a.missile.getX(), a.missile.getY(), a.missile.getWidth(), a.missile.getHeight()))
+			if (shield.collision(a.missile, 1))
 			{
-				a.missile.visible = false;
+				a.missile.setVisible(false);
 			}
+		}
+
+		//
+		// Iterate through all the aliens that are alive and
+		// see if they collided with the shield.
+		//
+		list = liveAliens.listIterator();
+		while(list.hasNext())
+		{
+			Alien a = list.next();
+			shield.collision(a, 5);
 		}
 	}
 }
