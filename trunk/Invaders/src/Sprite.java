@@ -156,6 +156,11 @@ public class Sprite {
 		}
 	}
 
+	public boolean collision(Sprite sprite)
+	{
+		return(collision(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()));
+	}
+	
 	/**
 	 * Check if this sprite has collided with the specified rectangle. 
 	 * @param xPos X coordinate of the colliding sprite.
