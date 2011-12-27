@@ -12,7 +12,7 @@ public class Game extends JFrame implements Runnable {
 
 	private Thread updateThread;
 	private Base base;
-	private int score;
+	private Score score;
 	private Insets insets;
 	private Dimension dim;
 	private Shield shield[];
@@ -35,11 +35,6 @@ public class Game extends JFrame implements Runnable {
 	
 	public Game() {
 		//
-		// Things that are reset per game
-		//
-		score = 0;
-		
-		//
 		// Create the window
 		//
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -56,6 +51,11 @@ public class Game extends JFrame implements Runnable {
 		dim = getSize();
 		insets = getInsets();
 
+		//
+		// Things that are reset per game
+		//
+		score = new Score(insets.left, insets.top + 20);
+		
 		createSprites();
 
 		addKeyListener(base);
@@ -102,7 +102,7 @@ public class Game extends JFrame implements Runnable {
 			//
 			// Collision checking
 			// 
-			score += aliens.collision(base);
+			score.add(aliens.collision(base));
 			for(i=0; i<3; i++)
 			{
 				shield[i].collision(base);
@@ -114,7 +114,7 @@ public class Game extends JFrame implements Runnable {
 			}
 			aliens.draw(g);
 			base.draw(g);
-			g.drawString(String.format("Score: % 4d", score), insets.left, insets.top + 20);
+			score.draw(g);
 
 			// Wait for vertical retrace then update the screen
 			VideoSync.waitForBeginOfVerticalBlank();
