@@ -82,32 +82,15 @@ public class Shield {
 	public boolean collision(Base base)
 	{
 		Sprite missile = base.missile;
-		int col;
-		int row;
 		boolean collided = false;
 
 		if (missile.visible)
 		{
-			for(row=0; row<5; row++)
+			if ((collided = collision(missile.getX(), missile.getY(), missile.getWidth(), missile.getHeight())))
 			{
-				for(col=0; col<5; col++)
-				{
-					if(shieldBlock[row][col].collision(missile.getX(), missile.getY(), missile.getWidth(), missile.getHeight()))
-					{
-						if(++shieldBlock[row][col].frame >= 4)
-						{
-							shieldBlock[row][col].visible = false;
-						}
-						collided = true;
-					}
-				}
+				missile.visible = false;
+				base.clearDirection(Base.BASE_FIRE);
 			}
-		}
-		
-		if (collided)
-		{
-			missile.visible = false;
-			base.clearDirection(Base.BASE_FIRE);
 		}
 		
 		return(collided);

@@ -272,4 +272,20 @@ public class Aliens {
 	{
 		return(liveAliens.size());
 	}
+
+	public void collision(Shield shield) {
+		//
+		// Iterate through all the aliens that are shooting and
+		// update the position of their missiles.
+		//
+		ListIterator<Alien> list = shootingAliens.listIterator();
+		while(list.hasNext())
+		{
+			Alien a = list.next();
+			if (shield.collision(a.missile.getX(), a.missile.getY(), a.missile.getWidth(), a.missile.getHeight()))
+			{
+				a.missile.visible = false;
+			}
+		}
+	}
 }
