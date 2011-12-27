@@ -266,4 +266,37 @@ public class Aliens {
 			shield.collision(a, 5);
 		}
 	}
+
+	public boolean collision(Base base) {
+		//
+		// Iterate through all the aliens that are shooting and
+		// update the position of their missiles.
+		//
+		ListIterator<Alien> list = shootingAliens.listIterator();
+		while(list.hasNext())
+		{
+			Alien a = list.next();
+			if (base.collision(a.missile))
+			{
+				a.missile.setVisible(false);
+				return(true);
+			}
+		}
+
+		//
+		// Iterate through all the aliens that are alive and
+		// see if they collided with the shield.
+		//
+		list = liveAliens.listIterator();
+		while(list.hasNext())
+		{
+			Alien a = list.next();
+			if (base.collision(a))
+			{
+				return(true);
+			}
+		}
+
+		return(false);
+	}
 }
