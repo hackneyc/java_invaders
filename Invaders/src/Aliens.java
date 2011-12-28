@@ -270,7 +270,7 @@ public class Aliens {
 	public boolean collision(Base base) {
 		//
 		// Iterate through all the aliens that are shooting and
-		// update the position of their missiles.
+		// see if the missiles hit the base.
 		//
 		ListIterator<Alien> list = shootingAliens.listIterator();
 		while(list.hasNext())
@@ -279,13 +279,15 @@ public class Aliens {
 			if (base.collision(a.missile))
 			{
 				a.missile.setVisible(false);
+				base.explode();
+				base.reset();
 				return(true);
 			}
 		}
 
 		//
 		// Iterate through all the aliens that are alive and
-		// see if they collided with the shield.
+		// see if they hit the base.
 		//
 		list = liveAliens.listIterator();
 		while(list.hasNext())
@@ -293,6 +295,8 @@ public class Aliens {
 			Alien a = list.next();
 			if (base.collision(a))
 			{
+				base.explode();
+				base.reset();
 				return(true);
 			}
 		}
