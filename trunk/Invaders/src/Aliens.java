@@ -183,6 +183,16 @@ public class Aliens {
 		}
 	}
 
+	public void setAlienSpeed(int speed)
+	{
+		alienSpeed = speed;
+	}
+
+	public int getAlienSpeed()
+	{
+		return(alienSpeed);
+	}
+	
 	public void reset()
 	{
 		liveAliens.clear();
@@ -194,13 +204,14 @@ public class Aliens {
 		{
 			for(int i=0; i<ALIENS_PER_ROW; i++)
 			{
+				alien[row][i].reset();
 				liveAliens.add(alien[row][i]);
 			}
 		}
+
 		alienDirection = ALIEN_DIRECTION_RIGHT;
 		moveDown = false;
 		alienMarchIndex = 0;
-		alienSpeed = 60;
 	}
 	
 	public Aliens(Dimension d, Insets insets)
