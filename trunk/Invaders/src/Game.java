@@ -91,8 +91,10 @@ public class Game extends JFrame implements Runnable {
 		Graphics2D g = (Graphics2D) bf.getDrawGraphics();
 
 		g.setColor(Color.GREEN);
-		score = new Score(insets.left + 100, insets.top + 20);
-		lives = new Lives(400, insets.top + 20);
+		font = new Font("Verdana", Font.BOLD, 24);
+		g.setFont(font);
+		score = new Score((int) (WINDOW_WIDTH*0.25) - (g.getFontMetrics().stringWidth("Score: 0000")/2), insets.top + 20);
+		lives = new Lives((int) (WINDOW_WIDTH*0.75) - (g.getFontMetrics().stringWidth("Lives: 0")/2), insets.top + 20);
 
 		while ((Thread.currentThread() == updateThread) && (lives.get() > 0)) {
 			g.clearRect(insets.left, insets.top, dim.width - insets.left
@@ -119,7 +121,7 @@ public class Game extends JFrame implements Runnable {
 
 			font = new Font("Verdana", Font.BOLD, 32);
 			g.setFont(font);
-			g.drawString(String.format("Level %d", level), 250, 200);
+			g.drawString(String.format("Level %d", level),  (int) (WINDOW_WIDTH*0.5) - g.getFontMetrics().stringWidth(String.format("Level %d", level))/2, (int) (WINDOW_HEIGHT*0.5));
 
 			font = new Font("Verdana", Font.BOLD, 24);
 			g.setFont(font);
@@ -186,8 +188,10 @@ public class Game extends JFrame implements Runnable {
 			//
 			if (speed >= 10)
 				speed -= 10;
-			aliens.setAlienSpeed(speed);
 
+			//
+			// Increment the level number.
+			//
 			level++;
 		}
 
@@ -197,7 +201,7 @@ public class Game extends JFrame implements Runnable {
 		g.setColor(Color.RED);
 		font = new Font("Verdana", Font.BOLD, 32);
 		g.setFont(font);
-		g.drawString("Game Over", 250, 200);
+		g.drawString("Game Over", (int) (WINDOW_WIDTH*0.5) - g.getFontMetrics().stringWidth("Game Over")/2, (int) (WINDOW_HEIGHT*0.5));
 		bf.show();
 
 		//
