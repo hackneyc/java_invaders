@@ -63,13 +63,11 @@ public class Alien extends Sprite {
 	
 	public boolean updateMissile()
 	{
-		boolean shooting = false;
 		if (missile.isVisible())
 		{
 			if ((missile.getY() + 8) < dim.height)
 			{
 				missile.setY(missile.getY()+8);
-				shooting = true;
 			}
 			else
 			{
@@ -77,7 +75,7 @@ public class Alien extends Sprite {
 			}
 		}
 		
-		return(shooting);
+		return(missile.isVisible());
 	}
 	
 	int getPoints()
@@ -90,4 +88,3 @@ public class Alien extends Sprite {
 		this.points = points;
 	}
 }
-

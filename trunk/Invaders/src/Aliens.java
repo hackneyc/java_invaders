@@ -22,7 +22,7 @@ public class Aliens {
 	private Alien alien[][];
 	private SoundClip invaderKilled;
 	public LinkedList<Alien> liveAliens = null;
-	private LinkedList<Alien> shootingAliens = null;
+	public LinkedList<Alien> shootingAliens = null;
 	private int alienSpeed;
 	private int alienSpeedCount = 0;
 
