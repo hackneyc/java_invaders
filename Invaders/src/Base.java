@@ -11,7 +11,6 @@ public class Base extends Sprite implements KeyListener {
 
 	private int baseSpeed;
 	private int baseDir;
-	public int hits;
 	private SoundClip baseShoot;
 	public Sprite missile;
 	private SoundClip explode;
@@ -22,7 +21,6 @@ public class Base extends Sprite implements KeyListener {
 		super(xPos, yPos, startFrame, fileName, maxFrames, fps, scaleX, scaleY, d);
 		missile = new Sprite(0, 0, 0, "missile", 2, 0, 4, 24, d);
 		baseShoot = new SoundClip("shoot.wav");
-		hits = 0;
 		baseSpeed = 4;
 		explode = new SoundClip("explosion.wav");
 		reset();
@@ -116,17 +114,14 @@ public class Base extends Sprite implements KeyListener {
 			{
 				Alien a = list.next();
 				// Check for alien collision with a missile
-				if (a.collision(missile.getX(),
-								missile.getY(),
-								missile.getWidth(),
-								missile.getHeight()))
+				if (a.collision(missile))
 				{
 					// Kill the missile
 					missile.setVisible(false);
 					// Set the alien as dieing
 					a.setDieing();
 					// Play the kill sound
-					explode();
+					aliens.explode();
 					// Clear the base fire direction so it can fire again.
 					clearDirection(Base.BASE_FIRE);
 					// Speed up the aliens as more die
