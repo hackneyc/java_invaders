@@ -1,3 +1,5 @@
+package com.digitalxfer.chackney.invaders;
+
 import javax.swing.*;
 import java.awt.*;
 
