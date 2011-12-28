@@ -16,21 +16,19 @@ public class Game extends JFrame implements Runnable {
 	private Dimension dim;
 	private Shield shield[];
 	private Aliens aliens;
-	
-	private void createSprites()
-	{
+
+	private void createSprites() {
 		int i;
-		
+
 		base = new Base(0, 0, 0, "base", 1, 0, 32, 22, dim);
-		aliens = new Aliens( dim, insets);
+		aliens = new Aliens(dim, insets);
 		shield = new Shield[3];
-		
-		for(i=0; i<3; i++)
-		{
-			shield[i] = new Shield(100+(i*200)+insets.left, 375);
+
+		for (i = 0; i < 3; i++) {
+			shield[i] = new Shield(100 + (i * 200) + insets.left, 375);
 		}
 	}
-	
+
 	public Game() {
 		//
 		// Create the window
@@ -54,8 +52,11 @@ public class Game extends JFrame implements Runnable {
 		//
 		createSprites();
 
+		//
+		// The base class needs to listen for key presses
+		//
 		addKeyListener(base);
-		
+
 		//
 		// Create a new thread to run the main game loop
 		//
@@ -85,74 +86,79 @@ public class Game extends JFrame implements Runnable {
 		Lives lives;
 		Font font;
 		int i;
-		int level = 0;
+		int level = 1;
 		BufferStrategy bf = getBufferStrategy();
 		Graphics2D g = (Graphics2D) bf.getDrawGraphics();
-				
+
 		g.setColor(Color.GREEN);
-		score = new Score(insets.left + 100, insets.top + 20);		
+		score = new Score(insets.left + 100, insets.top + 20);
 		lives = new Lives(400, insets.top + 20);
 
-		while ((Thread.currentThread() == updateThread) &&
-				   (lives.get() > 0)) {
-			g.clearRect(insets.left, insets.top, dim.width - insets.left - insets.right, dim.height - insets.bottom - insets.top);
+		while ((Thread.currentThread() == updateThread) && (lives.get() > 0)) {
+			g.clearRect(insets.left, insets.top, dim.width - insets.left
+					- insets.right, dim.height - insets.bottom - insets.top);
 
+			//
+			// Set the alien marching speed.
+			//
+			aliens.setAlienSpeed(speed);
+
+			//
+			// Reset the base and aliens.
+			//
 			base.reset();
 			aliens.reset();
-			
-			if(speed >= 10)
-				speed -= 10;
-			aliens.setAlienSpeed(speed);
-			
-			for(i=0; i<3; i++)
-			{
+
+			//
+			// Reset and display the shields
+			//
+			for (i = 0; i < 3; i++) {
 				shield[i].reset();
 				shield[i].draw(g);
 			}
-			
+
 			font = new Font("Verdana", Font.BOLD, 32);
 			g.setFont(font);
-			level++;
 			g.drawString(String.format("Level %d", level), 250, 200);
 
 			font = new Font("Verdana", Font.BOLD, 24);
-			g.setFont(font);	
+			g.setFont(font);
 			score.draw(g);
 			lives.draw(g);
-			
+
 			bf.show();
-			
+
+			//
+			// Pause for a while
+			//
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			while ((Thread.currentThread() == updateThread) &&
-				   (aliens.numAlive() != 0) &&
-				   (lives.get() > 0)) {
-	
-				g.clearRect(insets.left, insets.top, dim.width - insets.left - insets.right, dim.height - insets.bottom - insets.top);
-	
+
+			while ((Thread.currentThread() == updateThread)
+					&& (aliens.numAlive() != 0) && (lives.get() > 0)) {
+				g.clearRect(insets.left, insets.top, dim.width - insets.left
+						- insets.right, dim.height - insets.bottom - insets.top);
+
 				base.updatePosition();
 				aliens.updatePosition();
 				aliens.updateMissiles();
-	
+
 				//
 				// Collision checking
-				// 
+				//
 				score.add(base.collision(aliens));
-				
-				for(i=0; i<3; i++)
-				{
+
+				for (i = 0; i < 3; i++) {
 					base.collision(shield[i]);
 					aliens.collision(shield[i]);
 					shield[i].draw(g);
 				}
-	
-				if (aliens.collision(base))
-				{
+
+				if (aliens.collision(base)) {
 					try {
 						Thread.sleep(1500);
 					} catch (InterruptedException e) {
@@ -161,34 +167,42 @@ public class Game extends JFrame implements Runnable {
 					}
 					lives.decrement();
 				}
-				
+
 				aliens.draw(g);
 				base.draw(g);
 				score.draw(g);
 				lives.draw(g);
-	
+
 				// Wait for vertical retrace then update the screen
 				VideoSync.waitForBeginOfVerticalBlank();
 				// Make the buffer visible
 				bf.show();
 				// Force the buffer to the screen
 				Toolkit.getDefaultToolkit().sync();
-	/*			
-				try {
-					// Give other things time to do stuff.
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					break;
-				}
-	*/
 			}
+
+			//
+			// Increase the aliens speed.
+			//
+			if (speed >= 10)
+				speed -= 10;
+			aliens.setAlienSpeed(speed);
+
+			level++;
 		}
+
+		//
+		// Game Over
+		//
 		g.setColor(Color.RED);
 		font = new Font("Verdana", Font.BOLD, 32);
 		g.setFont(font);
 		g.drawString("Game Over", 250, 200);
 		bf.show();
-		
+
+		//
+		// Delay for 2 seconds
+		//
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -196,6 +210,9 @@ public class Game extends JFrame implements Runnable {
 			e.printStackTrace();
 		}
 
+		//
+		// Dispose of the graphics context.
+		//
 		g.dispose();
 	}
 }
