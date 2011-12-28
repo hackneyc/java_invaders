@@ -24,12 +24,21 @@ public class Shield {
 		shieldBlock[4][3].setVisible(false);
 	}
 
-	public Shield(int x, int y) {
+	public int getWidth() {
+		return(shieldBlock[0][0].getWidth()*5);
+	}
+
+	public void setX(int x) {
+		startX = x;
+	}
+
+	public void setY(int y) {
+		startY = y;
+	}
+	
+	public Shield() {
 		int row;
 		int col;
-
-		startX = x;
-		startY = y;
 
 		shieldBlock = new Sprite[5][5];
 

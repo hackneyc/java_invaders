@@ -15,15 +15,15 @@ public class Base extends Sprite implements KeyListener {
 	public Sprite missile;
 	private SoundClip explode;
 	private boolean fireReleased;
+	private Dimension dim;
 
-	public Base(int xPos, int yPos, int startFrame, String fileName,
-			int maxFrames, int fps, int scaleX, int scaleY, Dimension d) {
-		super(xPos, yPos, startFrame, fileName, maxFrames, fps, scaleX, scaleY,
-				d);
-		missile = new Sprite(0, 0, 0, "missile", 2, 0, 4, 24, d);
+	public Base(String fileName, int maxFrames, int scaleX, int scaleY, Dimension d) {
+		super(fileName, maxFrames, scaleX, scaleY);
+		missile = new Sprite("missile", 1, 4, 24);
 		baseShoot = new SoundClip("shoot.wav");
 		baseSpeed = 4;
 		explode = new SoundClip("explosion.wav");
+		dim = d;
 		reset();
 	}
 

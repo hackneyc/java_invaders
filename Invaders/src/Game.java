@@ -20,12 +20,14 @@ public class Game extends JFrame implements Runnable {
 	private void createSprites() {
 		int i;
 
-		base = new Base(0, 0, 0, "base", 1, 0, 32, 22, dim);
+		base = new Base("base", 1, 32, 22, dim);
 		aliens = new Aliens(dim, insets);
 		shield = new Shield[3];
 
 		for (i = 0; i < 3; i++) {
-			shield[i] = new Shield(100 + (i * 200) + insets.left, 375);
+			shield[i] = new Shield();
+			shield[i].setX(((int) (WINDOW_WIDTH*0.25) * (i+1)) - (shield[i].getWidth()/2));
+			shield[i].setY(375);
 		}
 	}
 
