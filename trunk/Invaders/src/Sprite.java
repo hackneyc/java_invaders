@@ -35,11 +35,6 @@ public class Sprite {
 		return(image[frame].getHeight(null));
 	}
 	
-	public boolean isAlive()
-	{
-		return(visible);
-	}
-	
 	public int getX()
 	{
 		return(x);
