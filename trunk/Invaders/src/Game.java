@@ -93,7 +93,9 @@ public class Game extends JFrame implements Runnable {
 		g.setFont(font);
 		g.setColor(Color.GREEN);
 		
-		while (Thread.currentThread() == updateThread && (aliens.numAlive() != 0)) {
+		while ((Thread.currentThread() == updateThread) &&
+			   (aliens.numAlive() != 0) &&
+			   (lives.get() > 0)) {
 
 			g.clearRect(insets.left, insets.top, dim.width - insets.left - insets.right, dim.height - insets.bottom - insets.top);
 
@@ -110,12 +112,14 @@ public class Game extends JFrame implements Runnable {
 			{
 				base.collision(shield[i]);
 				aliens.collision(shield[i]);
-			}
-
-			for(i=0; i<3; i++)
-			{
 				shield[i].draw(g);
 			}
+
+			if (aliens.collision(base))
+			{
+				lives.decrement();
+			}
+			
 			aliens.draw(g);
 			base.draw(g);
 			score.draw(g);
