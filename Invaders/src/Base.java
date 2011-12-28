@@ -130,6 +130,21 @@ public class Base extends Sprite implements KeyListener {
 					return(a.getPoints());
 				}
 			}
+
+			list = aliens.shootingAliens.listIterator();
+			while(list.hasNext())
+			{
+				Alien a = list.next();
+				if (missile.collision(a.missile))
+				{
+					// Kill the missiles
+					a.missile.setVisible(false);
+					missile.setVisible(false);
+					// Clear the base fire direction so it can fire again.
+					clearDirection(Base.BASE_FIRE);
+					list.remove();
+				}
+			}
 		}
 		return(0);
 	}
