@@ -43,15 +43,13 @@ public class Alien extends Sprite {
 	}
 
 	public boolean shoot() {
-		boolean shooting = false;
-		if (isVisible()) {
+		if (isVisible() && !missile.isVisible()) {
 			// New missile
-			shooting = true;
 			missile.setVisible(true);
 			missile.setX((getX() + (getWidth() / 2)) - (missile.getWidth() / 2));
 			missile.setY(getY() + getHeight());
 		}
-		return (shooting);
+		return (missile.isVisible());
 	}
 
 	public boolean updateMissile() {
