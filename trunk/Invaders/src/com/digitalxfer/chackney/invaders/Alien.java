@@ -1,3 +1,5 @@
+package com.digitalxfer.chackney.invaders;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 
