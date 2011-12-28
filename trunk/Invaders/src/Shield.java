@@ -3,20 +3,21 @@ import java.awt.Graphics;
 
 public class Shield {
 	public Sprite shieldBlock[][];
+	private int startX;
+	private int startY;
 	
-	public Shield()
+	public void reset()
 	{
 		int row;
 		int col;
 		
-		shieldBlock = new Sprite[5][5];
-
 		for(row=0; row<5; row++)
 		{
 			for(col=0; col<5; col++)
 			{
-				shieldBlock[row][col] = new Sprite("shield", 4);
-				shieldBlock[row][col].setVisible(true);
+				shieldBlock[row][col].reset();
+				shieldBlock[row][col].setX(startX + (col * 8));
+				shieldBlock[row][col].setY(startY + (row * 8));
 			}
 		}
 		
@@ -26,20 +27,26 @@ public class Shield {
 		shieldBlock[4][2].setVisible(false);
 		shieldBlock[4][3].setVisible(false);
 	}
-
-	public void setXY(int newX, int newY)
+	
+	public Shield(int x, int y)
 	{
-		int col;
 		int row;
+		int col;
 		
+		startX = x;
+		startY = y;
+		
+		shieldBlock = new Sprite[5][5];
+
 		for(row=0; row<5; row++)
 		{
 			for(col=0; col<5; col++)
 			{
-				shieldBlock[row][col].setX(newX + (col * 8));
-				shieldBlock[row][col].setY(newY + (row * 8));
+				shieldBlock[row][col] = new Sprite("shield", 4);
 			}
 		}
+		
+		reset();
 	}
 
 	public void draw(Graphics g)
