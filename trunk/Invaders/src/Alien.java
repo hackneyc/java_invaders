@@ -2,7 +2,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 public class Alien extends Sprite {
-	
 	public Sprite missile;
 	public Sprite explode;
 	private int points;
@@ -51,7 +50,7 @@ public class Alien extends Sprite {
 	public boolean shoot()
 	{
 		boolean shooting = false;
-		if (isAlive())
+		if (isVisible())
 		{
 			// New missile
 			shooting = true;
