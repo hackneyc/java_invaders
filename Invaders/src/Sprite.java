@@ -1,4 +1,3 @@
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -23,32 +22,59 @@ public class Sprite {
 	public int frame;
 	private int x;
 	private int y;
-	public Dimension dim;
 
+	/**
+	 * Obtain the width of the sprite.
+	 * @return Width of the sprite in pixels.
+	 */
 	public int getWidth() {
 		return (image[frame].getWidth(null));
 	}
 
+	/**
+	 * Obtain the height of the sprite.
+	 * @return Height of the sprite in pixels.
+	 */
 	public int getHeight() {
 		return (image[frame].getHeight(null));
 	}
 
+	/**
+	 * Obtain the x coordinate of the sprite.
+	 * @return x coordinate of the sprite.
+	 */
 	public int getX() {
 		return (x);
 	}
 
+	/**
+	 * Obtain the y coordinate of the sprite.
+	 * @return y coordinate of the sprite.
+	 */
 	public int getY() {
 		return (y);
 	}
 
+	/**
+	 * Set the x coordinate of the sprite.
+	 * @param newX The new x coordinate of the sprite.
+	 */
 	public void setX(int newX) {
 		x = newX;
 	}
 
+	/**
+	 * Set the y coordinate of the sprite.
+	 * @param newY The new y coordinate of the sprite.
+	 */
 	public void setY(int newY) {
 		y = newY;
 	}
 
+	/**
+	 * Advance to the sprite's next frame of animation, loop to the
+	 * first frame after the last frame. 
+	 */
 	public void nextAnimationFrame() {
 		//
 		// Update the animation
@@ -57,7 +83,7 @@ public class Sprite {
 	}
 
 	/**
-	 * Timer task to update current animation frame.
+	 * Timer task to update the sprite's animation frame.
 	 */
 	private class task extends TimerTask {
 		@Override
@@ -66,6 +92,12 @@ public class Sprite {
 		}
 	}
 
+	/**
+	 * This function performs the following actions:
+	 * - Resets the sprite's x and y coordinates to their initial values.
+	 * - Resets the active animation frame to its initial value.
+	 * - Set the sprite to be visible.
+	 */
 	public void reset() {
 		frame = startFrame;
 		x = startX;
@@ -73,6 +105,15 @@ public class Sprite {
 		visible = true;
 	}
 
+	/**
+	 * Create a sprite using the specified base file name. The sprite
+	 * is made up of the specified number of animation frames.
+	 * @param fileName 
+	 *            Image file name minus frame number and extension
+	 *            "fileName#.gif".
+	 * @param numFrames
+	 *            Total number of animation frames.
+	 */
 	public Sprite(String fileName, int numFrames) {
 		image = new Image[numFrames];
 		startFrame = 0;
@@ -89,28 +130,57 @@ public class Sprite {
 	}
 
 	/**
+	 * Create a sprite using the specified base file name. The sprite
+	 * is made up of the specified number of animation frames.
+	 * @param fileName 
+	 *            Image file name minus frame number and extension
+	 *            "fileName#.gif".
+	 * @param numFrames
+	 *            Total number of animation frames.
+	 * @param scaleX
+	 *            Image X scaling size.
+	 * @param scaleY
+	 *            Image Y scaling size.
+	 */
+	public Sprite(String fileName, int numFrames, int scaleX, int scaleY) {
+		image = new Image[numFrames];
+		startFrame = 0;
+		for (int i = 0; i < numFrames; i++) {
+			InputStream stream = ClassLoader.getSystemResourceAsStream(fileName
+					+ i + ".gif");
+			try {
+				image[i] = ImageIO.read(stream);
+			} catch (IOException e) {
+				System.out.println("Error loading " + fileName + i + ".gif");
+				e.printStackTrace();
+			}
+			image[i] = image[i].getScaledInstance(scaleX, scaleY,
+					Image.SCALE_SMOOTH);
+		}
+	}
+
+	/**
 	 * 
 	 * @param xPos
-	 *            Starting X position
+	 *            Sprite's initial x coordinate.
 	 * @param yPos
-	 *            Starting Y position
+	 *            Sprite's initial y coordinate.
 	 * @param startFrame
-	 *            Starting animation frame number
+	 *            Sprite's initial animation frame number.
 	 * @param fileName
 	 *            Image file name minus frame number and extension
 	 *            "fileName#.gif"
 	 * @param maxFrames
-	 *            Total number of animation frames
+	 *            Total number of animation frames for the sprite.
 	 * @param fps
-	 *            Animation speed in frames per second
+	 *            Animation speed in frames per second.
 	 * @param scaleX
-	 *            Image X scaling size
+	 *            Image X scaling size.
 	 * @param scaleY
-	 *            Image Y scaling size
+	 *            Image Y scaling size.
 	 */
 	public Sprite(int xPos, int yPos, int startFrame, String fileName,
-			int maxFrames, int fps, int scaleX, int scaleY, Dimension d) {
-		dim = d;
+			int maxFrames, int fps, int scaleX, int scaleY) {
 		timer = new Timer();
 		image = new Image[maxFrames];
 
@@ -139,11 +209,7 @@ public class Sprite {
 
 	/**
 	 * Draw the sprite on the specified graphics context.
-	 * 
-	 * @param g
-	 *            Graphic context
-	 * @param parent
-	 *            Parent class
+	 * @param g Graphic context.
 	 */
 	public void draw(Graphics g) {
 		if (visible) {
@@ -151,6 +217,11 @@ public class Sprite {
 		}
 	}
 
+	/**
+	 * Check if the specified sprite has collided with this sprite.
+	 * @param sprite Sprite to check for a collision with.
+	 * @return true if a collision is detected else false.
+	 */
 	public boolean collision(Sprite sprite) {
 		return (collision(sprite.getX(), sprite.getY(), sprite.getWidth(),
 				sprite.getHeight()));
@@ -178,10 +249,18 @@ public class Sprite {
 		return (false);
 	}
 
+	/**
+	 * Determine if the sprite is visible.
+	 * @return true if the sprite is visible else false.
+	 */
 	public boolean isVisible() {
 		return (visible);
 	}
 
+	/**
+	 * Set the visibility of the sprite.
+	 * @param vis true if the sprite is visible, else false.
+	 */
 	public void setVisible(boolean vis) {
 		visible = vis;
 	}
