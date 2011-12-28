@@ -8,14 +8,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundClip {
 	private Clip clip = null;
-	
-	public SoundClip(String fileName)
-	{
+
+	public SoundClip(String fileName) {
 		InputStream stream = ClassLoader.getSystemResourceAsStream(fileName);
 		AudioInputStream sound;
 		try {
-			if((sound = AudioSystem.getAudioInputStream(stream)) != null)
-			{
+			if ((sound = AudioSystem.getAudioInputStream(stream)) != null) {
 				clip = AudioSystem.getClip();
 				clip.open(sound);
 			}
@@ -28,23 +26,20 @@ public class SoundClip {
 			e.printStackTrace();
 		}
 	}
-  
-	public void play()
-	{
-		if(clip != null)
-		{
-			if(clip.isRunning())
+
+	public void play() {
+		if (clip != null) {
+			if (clip.isRunning())
 				clip.stop();
 			clip.setFramePosition(0);
 			clip.start();
 		}
 	}
-	
-	public boolean isPlaying()
-	{
-		if (clip != null)
-			return(clip.isRunning());
 
-		return(false);
+	public boolean isPlaying() {
+		if (clip != null)
+			return (clip.isRunning());
+
+		return (false);
 	}
-}        
+}
