@@ -70,7 +70,7 @@ public class Game extends JFrame implements Runnable {
 
 	public static void main(String[] args) {
 		new Game();
-		System.out.println("Hello World!");
+//		System.out.println("Hello World!");
 	}
 
 	@Override
