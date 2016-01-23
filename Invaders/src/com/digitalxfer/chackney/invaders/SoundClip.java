@@ -13,7 +13,6 @@ import java.net.URL;
 
 public class SoundClip {
 	private Clip clip = null;
-
 	public SoundClip(String fileName) {
 		try {
 			// Convert the filename to a URL
@@ -38,17 +37,9 @@ public class SoundClip {
 
 	public void play() {
 		if (clip != null) {
-			if (clip.isRunning())
-				clip.stop();
+			clip.stop();
 			clip.setFramePosition(0);
 			clip.start();
 		}
-	}
-
-	public boolean isPlaying() {
-		if (clip != null)
-			return (clip.isRunning());
-
-		return (false);
 	}
 }
